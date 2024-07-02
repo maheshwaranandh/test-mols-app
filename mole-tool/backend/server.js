@@ -55,7 +55,7 @@ ${data.numberOfCycles}
 
             output.on('close', () => {
                 console.log(`Zip file created: ${archive.pointer()} total bytes`);
-                res.json({ downloadUrl: `http://localhost:${PORT}/download/results.zip` });
+                res.json({ downloadUrl: `http://18.212.115.85/api/download/results.zip` });
             });
 
             archive.on('error', (err) => {
