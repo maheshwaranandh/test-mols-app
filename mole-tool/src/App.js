@@ -25,7 +25,7 @@ function App() {
         e.preventDefault();
         setLoading(true);
         setDownloadLink('');
-        axios.post('http://localhost:5000/update-file', formData)
+        axios.post('/api/update-file', formData)
             .then(response => {
                 setDownloadLink(response.data.downloadUrl);
                 setLoading(false);
