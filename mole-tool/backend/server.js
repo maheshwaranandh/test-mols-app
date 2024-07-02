@@ -37,7 +37,7 @@ ${data.numberOfCycles}
             return res.status(500).send('Error writing to file');
         }
 
-        const execPath = path.join(__dirname, '../../mols_src/./existential');
+        const execPath = path.join(__dirname, '../../mols_src/./lmols.sh');
         exec(execPath, (err, stdout, stderr) => {
             if (err) {
                 console.error('Error executing lmols', err);
