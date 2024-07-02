@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 app.use('/mols_src', express.static(path.join(__dirname, '../../mols_src')));
 
-app.post('/update-file', (req, res) => {
+app.post('/api/update-file', (req, res) => {
     const data = req.body;
     const filePath = path.join(__dirname, '../../mols_src/usermols.inp');
 
