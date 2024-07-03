@@ -14,11 +14,44 @@ ENV_FILE=$MOLE_TOOL_DIR/.env
 echo "Updating package lists..."
 sudo apt-get update
 
-echo "Installing Node.js and npm..."
-sudo apt-get install -y nodejs npm
+# Install Nginx if not already installed
+if ! command -v nginx &> /dev/null
+then
+    echo "Installing Nginx..."
+    sudo apt-get install -y nginx
+else
+    echo "Nginx is already installed"
+fi
 
-echo "Installing pm2 globally..."
-sudo npm install -g pm2
+# Write the Nginx configuration template
+echo "Writing Nginx configuration..."
+sudo cp $MOLE_TOOL_DIR/nginx_default_template $NGINX_CONF
+
+# Update the Nginx configuration with the public IP
+echo "Updating Nginx configuration with public IP..."
+sudo sed -i "s/__PUBLIC_IP__/$PUBLIC_IP/" $NGINX_CONF
+
+# Restart Nginx to apply changes
+echo "Restarting Nginx..."
+sudo systemctl restart nginx
+
+# Install Node.js and npm if not already installed
+if ! command -v node &> /dev/null
+then
+    echo "Installing Node.js and npm..."
+    sudo apt-get install -y nodejs npm
+else
+    echo "Node.js and npm are already installed"
+fi
+
+# Install pm2 globally if not already installed
+if ! command -v pm2 &> /dev/null
+then
+    echo "Installing pm2 globally..."
+    sudo npm install -g pm2
+else
+    echo "pm2 is already installed"
+fi
 
 # Navigate to mole-tool and install dependencies
 echo "Installing dependencies for the frontend..."
@@ -43,16 +76,8 @@ echo "Starting the frontend server..."
 cd $MOLE_TOOL_DIR
 pm2 start npm --name "mole-tool-frontend" -- start
 
-# Update the Nginx configuration
-echo "Updating Nginx configuration..."
-sudo sed -i "s/server_name .*/server_name $PUBLIC_IP;/" $NGINX_CONF
-
 # Update the React app environment variable
 echo "Updating React app environment variable..."
 echo "REACT_APP_PUBLIC_URL=http://$PUBLIC_IP" > $ENV_FILE
-
-# Restart Nginx to apply changes
-echo "Restarting Nginx..."
-sudo systemctl restart nginx
 
 echo "Deployment script executed successfully."
