@@ -27,7 +27,7 @@ function App() {
         setDownloadLink('');
         axios.post('/api/update-file', formData)
             .then(response => {
-                setDownloadLink(`http://18.212.115.85/download/results.zip`);
+                setDownloadLink(`${process.env.REACT_APP_PUBLIC_URL}/download/results.zip`);
                 setLoading(false);
             })
             .catch(error => {
