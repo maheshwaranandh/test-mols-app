@@ -11,7 +11,8 @@ function App() {
         numberOfCycles: '',
     });
     const [loading, setLoading] = useState(false);
-    const downloadLink = `http://18.212.115.85/download/results.zip`
+    const [downloadLink, setDownloadLink] = useState('');
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -23,8 +24,10 @@ function App() {
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
+        setDownloadLink('');
         axios.post('/api/update-file', formData)
             .then(response => {
+                setDownloadLink(`http://18.212.115.85/download/results.zip`);
                 setLoading(false);
             })
             .catch(error => {
