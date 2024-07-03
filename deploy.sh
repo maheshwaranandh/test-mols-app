@@ -31,6 +31,11 @@ sudo cp $MOLE_TOOL_DIR/nginx_default_template $NGINX_CONF
 echo "Updating Nginx configuration with public IP..."
 sudo sed -i "s/__PUBLIC_IP__/$PUBLIC_IP/" $NGINX_CONF
 
+#handle permission for files problem
+sudo usermod -aG ubuntu www-data
+sudo chown -R ubuntu:ubuntu /home/ubuntu/molecular-web-app/mols_src/
+sudo chmod -R 775 /home/ubuntu/molecular-web-app/mols_src/
+
 # Restart Nginx to apply changes
 echo "Restarting Nginx..."
 sudo systemctl restart nginx
