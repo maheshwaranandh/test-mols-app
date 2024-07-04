@@ -31,6 +31,10 @@ sudo cp $MOLE_TOOL_DIR/nginx_default_template $NGINX_CONF
 echo "Updating Nginx configuration with public IP..."
 sudo sed -i "s/__PUBLIC_IP__/$PUBLIC_IP/" $NGINX_CONF
 
+# Update the React app environment variable
+echo "Updating React app environment variable..."
+echo "REACT_APP_PUBLIC_URL=http://$PUBLIC_IP" > $ENV_FILE
+
 #handle permission for files problem
 sudo usermod -aG ubuntu www-data
 sudo chown -R ubuntu:ubuntu /home/ubuntu/molecular-web-app/mols_src/
@@ -81,8 +85,5 @@ echo "Starting the frontend server..."
 cd $MOLE_TOOL_DIR
 pm2 start npm --name "mole-tool-frontend" -- start
 
-# Update the React app environment variable
-echo "Updating React app environment variable..."
-echo "REACT_APP_PUBLIC_URL=http://$PUBLIC_IP" > $ENV_FILE
 
 echo "Deployment script executed successfully."
